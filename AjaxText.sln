@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjaxText", "AjaxText\AjaxText.csproj", "{C640FF23-693B-4D36-9C26-7D7DA34FAB52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjaxClient", "AjaxClient\AjaxClient.csproj", "{04A9B63A-8326-4B86-B05A-9D4BC54DA159}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjaxShared", "AjaxShared\AjaxShared.csproj", "{E370451B-54C9-4767-B7A2-3F43916A3A37}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{C640FF23-693B-4D36-9C26-7D7DA34FAB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C640FF23-693B-4D36-9C26-7D7DA34FAB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C640FF23-693B-4D36-9C26-7D7DA34FAB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04A9B63A-8326-4B86-B05A-9D4BC54DA159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04A9B63A-8326-4B86-B05A-9D4BC54DA159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04A9B63A-8326-4B86-B05A-9D4BC54DA159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04A9B63A-8326-4B86-B05A-9D4BC54DA159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E370451B-54C9-4767-B7A2-3F43916A3A37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E370451B-54C9-4767-B7A2-3F43916A3A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E370451B-54C9-4767-B7A2-3F43916A3A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E370451B-54C9-4767-B7A2-3F43916A3A37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

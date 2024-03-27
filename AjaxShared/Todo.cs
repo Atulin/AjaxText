@@ -1,3 +1,3 @@
 ﻿namespace AjaxShared;
 
-public record Todo();
+public sealed record Todo(Guid Id, string Body, DateTimeOffset Time, DateTimeOffset CreatedAt);
