@@ -1,73 +1,63 @@
-﻿using System.Globalization;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
+using System.Web;
 using AjaxTest.Shared;
+using Spectre.Console;
+using Spectre.Console.Rendering;
 
-Console.WriteLine("Hello, World!");
+AnsiConsole.WriteLine("Hello, World!");
 
 var client = new HttpClient();
 client.BaseAddress = new Uri("https://localhost:7082");
 
 string? cmd;
 do {
-	Console.WriteLine("""
-	    [q]    Exit
-	    [all]  List all todos
-	    [add]  Add new todo
-	    [find] Find todo by ID              
-	    """);
-	cmd = Console.ReadLine();
+	cmd = AnsiConsole.Prompt(new SelectionPrompt<string>()
+		.Title("[bold]What do you want to do?[/]")
+		.PageSize(10)
+		.AddChoices(["List all", "Add new", "Find", "Quit"]));
 
 	try{
 		switch (cmd){
-			case "all":
+			case "List all":
 				await All();
 				break;
-			case "add":
+			case "Add new":
 				await Add();
 				break;
-			case "find":
+			case "Find":
 				await Find();
 				break;
-			case "q":
-				Console.WriteLine("Closing...");
+			case "Quit":
+                AnsiConsole.MarkupLine("[red]Closing...[/]");
 				break;
 			default:
-				Console.WriteLine("Unknown command");
+                AnsiConsole.MarkupLine("[red]Unknown command[/]");
 				break;
 		}
 	}
 	catch (Exception e){
-		Console.WriteLine($"An error has occurred: {e.Message}");
+        AnsiConsole.MarkupLineInterpolated($"[red]An error has occurred: [bold]{e.Message}[/][/]");
 	}
 
-} while (cmd is not null and not "q");
+} while (cmd is not null and not "Quit");
 return;
 
 async Task All()
 {
 	var todos = await client.GetFromJsonAsync<List<Todo>>("all");
 	foreach (var todo in todos ?? []){
-		Console.WriteLine($"""
-	       {todo.Id}
-	       Created at {todo.CreatedAt}
-	       Due by {todo.Time}
-	           {todo.Body}
-	       ---
-	       """);
+		var panel = new Panel($"""
+		    Due [bold]{todo.Time}[/]
+		    [italic green]{todo.Body}[/]
+		    """).Header(todo.Id);
+		AnsiConsole.Write(panel);
 	}
 }
 
 async Task Add()
 {
-	Console.WriteLine("Enter body:");
-	var body = Console.ReadLine() ?? "";
-
-	const string format = "yyyy-MM-dd HH:mm";
-	Console.WriteLine($"Enter due date ({format}):");
-	DateTimeOffset due;
-	while (!DateTimeOffset.TryParseExact(Console.ReadLine(), format, CultureInfo.InvariantCulture, DateTimeStyles.None, out due)){
-		Console.WriteLine("Incorrect format!");
-	}
+	var body = AnsiConsole.Ask<string>("[bold]Enter body:[/]");
+	var due = AnsiConsole.Ask<DateTimeOffset>("[bold]Enter due date:[/]");
 
 	var todo = new TodoMinimal(body, due);
 	var res = await client.PostAsJsonAsync("add", todo);
@@ -75,30 +65,25 @@ async Task Add()
 	var data = await res.Content.ReadFromJsonAsync<Todo>();
 
 	var msg = res.IsSuccessStatusCode && data is not null
-		? $"Created todo with id {data.Id}" 
-		: $"Error {res.StatusCode} {res.ReasonPhrase}";
-	
-	Console.WriteLine(msg);
+		? $"[green]Created todo with id {data.Id}[/]" 
+		: $"[red]Error {res.StatusCode} {res.ReasonPhrase}[/]";
+
+    AnsiConsole.MarkupLine(msg);
 }
 
 async Task Find()
 {
-	Console.WriteLine("Enter ID:");
-	Guid id;
-	while (!Guid.TryParse(Console.ReadLine(), out id)){
-		Console.WriteLine("Incorrect format!");
-	}
+	var id = AnsiConsole.Ask<ShortGuid>("[bold]Enter ID:[/]");
 
-	var todo = await client.GetFromJsonAsync<Todo>($"find?id={id}");
-	
-	var msg = todo is null
-		? "Todo not found" 
-		:  $"""
-	       {todo.Id}
-	       Created at {todo.CreatedAt}
-	       Due by {todo.Time}
-	           {todo.Body}
-	       """;
-	
-	Console.WriteLine(msg);
+	var todo = await client.GetFromJsonAsync<Todo>($"find?id={HttpUtility.UrlEncode(id)}");
+
+	Renderable msg = todo is null
+		? new Markup("[red]Todo not found[/]") 
+		: new Panel($"""
+              [gray]Created [bold]{todo.CreatedAt}[/][/]
+              Due [bold]{todo.Time}[/]
+              [italic green]{todo.Body}[/]
+              """).Header(todo.Id);
+
+    AnsiConsole.Write(msg);
 }
