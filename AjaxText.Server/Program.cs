@@ -50,7 +50,7 @@ app.MapGet("/find", async (Guid id) => {
 		? []
 		: JsonSerializer.Deserialize<List<Todo>>(file) ?? [];
 
-	var todo = todos.FirstOrDefault();
+	var todo = todos.FirstOrDefault(t => t.Id == id);
 
 	return todo is null ? Results.NotFound() : Results.Ok(todo);
 });
