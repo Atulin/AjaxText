@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Net.Http.Json;
-using AjaxShared;
+using AjaxTest.Shared;
 
 Console.WriteLine("Hello, World!");
 

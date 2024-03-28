@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\AjaxShared\AjaxShared.csproj" />
+      <ProjectReference Include="..\AjaxTest.Shared\AjaxTest.Shared.csproj" />
     </ItemGroup>
 
 </Project>

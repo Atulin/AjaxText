@@ -1,5 +1,5 @@
 using System.Text.Json;
-using AjaxShared;
+using AjaxTest.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
